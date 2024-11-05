@@ -1,0 +1,38 @@
+{
+  "commits": [
+    {
+      "id": "7a1a98ac-1de4-4606-9558-6e5e29bb68b4",
+      "message": "test",
+      "timestamp": "2024-11-05T22:51:02.855139Z",
+      "files": {
+        "test.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "424175e9-2b76-4868-bc50-d52d0cfda0fe",
+      "message": "test1",
+      "timestamp": "2024-11-05T22:52:30.075380Z",
+      "files": {
+        "test.md": "634b027b1b69e1242d40d53e312b3b4ac7710f55be81f289b549446ef6778bee"
+      }
+    },
+    {
+      "id": "2eda0200-25ba-45a3-a896-31d6af0b7116",
+      "message": "test2",
+      "timestamp": "2024-11-05T22:57:32.129829Z",
+      "files": {
+        "test1.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "5ad399a6-01b4-4c8e-8d5a-2ea06ab6f881",
+      "message": "test3",
+      "timestamp": "2024-11-05T22:58:43.990435Z",
+      "files": {
+        "test1.md": "634b027b1b69e1242d40d53e312b3b4ac7710f55be81f289b549446ef6778bee"
+      }
+    }
+  ],
+  "staging": {},
+  "working_dir": "/Users/wervand/Desktop/des/dev/version_control/version_control"
+}
