@@ -1,16 +1,17 @@
-// commands.rs
 use std::env;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::{Path };
 use walkdir::WalkDir;
 
 use crate::repository::Repository;
 use crate::utils;
 
+// Initialize a new repository in the current directory
 pub fn init() -> std::io::Result<()> {
     let working_dir = env::current_dir()?;
     let repo_dir = working_dir.join(".mini-git");
 
+    // Check if repository already exists
     if repo_dir.exists() {
         return Err(std::io::Error::new(
             std::io::ErrorKind::AlreadyExists,
@@ -18,6 +19,7 @@ pub fn init() -> std::io::Result<()> {
         ));
     }
 
+    // Create repository directory and initialize repository
     fs::create_dir_all(&repo_dir)?;
     let repo = Repository::new(working_dir);
     repo.save()?;
@@ -25,10 +27,13 @@ pub fn init() -> std::io::Result<()> {
     Ok(())
 }
 
+// Add files to the staging area
+// This function handles both single files and directories
 pub fn add(path: &str) -> std::io::Result<()> {
     let working_dir = env::current_dir()?;
     let mut repo = Repository::load(working_dir.clone())?;
 
+    // Handle the case when "." is provided (add all files)
     if path == "." {
         for entry in WalkDir::new(&working_dir)
             .into_iter()
@@ -36,6 +41,7 @@ pub fn add(path: &str) -> std::io::Result<()> {
             .filter(|e| e.file_type().is_file())
         {
             let path = entry.path();
+            // Skip .mini-git directory
             if !path.starts_with(working_dir.join(".mini-git")) {
                 repo.stage_file(path)?;
             }
@@ -43,11 +49,21 @@ pub fn add(path: &str) -> std::io::Result<()> {
     } else {
         let path = Path::new(path);
         if path.is_file() {
+            // Handle single file
             repo.stage_file(path)?;
+        } else if path.is_dir() {
+            // Handle directory by recursively adding all files
+            for entry in WalkDir::new(path)
+                .into_iter()
+                .filter_map(Result::ok)
+                .filter(|e| e.file_type().is_file())
+            {
+                repo.stage_file(entry.path())?;
+            }
         } else {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::NotFound,
-                "File not found",
+                "Path not found or is not accessible",
             ));
         }
     }
@@ -57,6 +73,7 @@ pub fn add(path: &str) -> std::io::Result<()> {
     Ok(())
 }
 
+// Create a new commit with the current staged changes
 pub fn commit(message: &str) -> std::io::Result<()> {
     let working_dir = env::current_dir()?;
     let mut repo = Repository::load(working_dir)?;
@@ -65,6 +82,7 @@ pub fn commit(message: &str) -> std::io::Result<()> {
     Ok(())
 }
 
+// Display commit history
 pub fn history() -> std::io::Result<()> {
     let working_dir = env::current_dir()?;
     let repo = Repository::load(working_dir)?;
@@ -85,16 +103,16 @@ pub fn history() -> std::io::Result<()> {
     Ok(())
 }
 
+// Push changes to remote repository
 pub fn push() -> std::io::Result<()> {
     let working_dir = env::current_dir()?;
     let repo = Repository::load(working_dir.clone())?;
     
-    // In a real implementation, this would push to a remote repository
-    // For this example, we'll just save to a "remote" directory
+    // Create remote directory if it doesn't exist
     let remote_dir = working_dir.join(".mini-git/remote");
     fs::create_dir_all(&remote_dir)?;
     
-    // Save the repository state to the remote
+    // Save repository state to remote
     let remote_repo_file = remote_dir.join("repository.json");
     let serialized = serde_json::to_string_pretty(&repo)?;
     fs::write(remote_repo_file, serialized)?;
@@ -103,6 +121,7 @@ pub fn push() -> std::io::Result<()> {
     Ok(())
 }
 
+// Pull changes from remote repository
 pub fn pull() -> std::io::Result<()> {
     let working_dir = env::current_dir()?;
     let remote_dir = working_dir.join(".mini-git/remote");
@@ -115,11 +134,11 @@ pub fn pull() -> std::io::Result<()> {
         ));
     }
     
-    // Load the remote repository state
+    // Load remote repository state
     let content = fs::read_to_string(remote_repo_file)?;
     let remote_repo: Repository = serde_json::from_str(&content)?;
     
-    // Update local repository with remote state
+    // Update local repository
     let repo_file = working_dir.join(".mini-git/repository.json");
     let serialized = serde_json::to_string_pretty(&remote_repo)?;
     fs::write(repo_file, serialized)?;
@@ -128,10 +147,12 @@ pub fn pull() -> std::io::Result<()> {
     Ok(())
 }
 
+// Checkout a specific commit
 pub fn checkout(commit_id: &str) -> std::io::Result<()> {
     let working_dir = env::current_dir()?;
     let repo = Repository::load(working_dir.clone())?;
     
+    // Find the specified commit
     let commit = match repo.get_commit(commit_id) {
         Some(commit) => commit,
         None => {
@@ -142,7 +163,7 @@ pub fn checkout(commit_id: &str) -> std::io::Result<()> {
         }
     };
     
-    // Create a backup of the current state
+    // Create backup of current state
     let backup_dir = working_dir.join(".mini-git/backup");
     if backup_dir.exists() {
         fs::remove_dir_all(&backup_dir)?;
@@ -150,14 +171,16 @@ pub fn checkout(commit_id: &str) -> std::io::Result<()> {
     utils::copy_dir_contents(&working_dir, &backup_dir)?;
     
     // Restore files from the commit
-    for (path, _) in &commit.files {
+    for (path, content_hash) in &commit.files {
         let file_path = working_dir.join(path);
+        // Create parent directories if they don't exist
         if let Some(parent) = file_path.parent() {
             fs::create_dir_all(parent)?;
         }
-        // In a real implementation, we would restore the file content from a blob store
-        // For this example, we'll just create empty files
-        fs::write(&file_path, "")?;
+        
+        // Retrieve and write file content from object store
+        let content = repo.get_object(content_hash)?;
+        fs::write(&file_path, content)?;
     }
     
     println!("Checked out commit: {}", &commit.id[..8]);
