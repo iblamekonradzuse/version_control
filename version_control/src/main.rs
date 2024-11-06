@@ -59,6 +59,24 @@ fn main() {
                         .index(1),
                 ),
         )
+        .subcommand(
+            SubCommand::with_name("loadlast")
+                .about("Checkout the most recent commit"),
+        )
+        .subcommand(
+            SubCommand::with_name("diff")
+                .about("Show changes between commits or working directory")
+                .arg(
+                    Arg::with_name("commit_id1")
+                        .help("First commit ID (optional)")
+                        .index(1),
+                )
+                .arg(
+                    Arg::with_name("commit_id2")
+                        .help("Second commit ID (optional)")
+                        .index(2),
+                ),
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -109,6 +127,20 @@ fn main() {
             let commit_id = checkout_matches.value_of("commit_id").unwrap();
             if let Err(e) = commands::checkout(commit_id) {
                 eprintln!("Error checking out commit: {}", e);
+                process::exit(1);
+            }
+        }
+        ("loadlast", Some(_)) => {
+            if let Err(e) = commands::loadlast() {
+                eprintln!("Error loading last commit: {}", e);
+                process::exit(1);
+            }
+        }
+        ("diff", Some(diff_matches)) => {
+            let commit_id1 = diff_matches.value_of("commit_id1");
+            let commit_id2 = diff_matches.value_of("commit_id2");
+            if let Err(e) = commands::diff(commit_id1, commit_id2) {
+                eprintln!("Error showing diff: {}", e);
                 process::exit(1);
             }
         }

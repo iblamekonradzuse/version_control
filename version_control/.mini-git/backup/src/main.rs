@@ -59,6 +59,10 @@ fn main() {
                         .index(1),
                 ),
         )
+        .subcommand(
+            SubCommand::with_name("loadlast")
+                .about("Checkout the most recent commit"),
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -109,6 +113,12 @@ fn main() {
             let commit_id = checkout_matches.value_of("commit_id").unwrap();
             if let Err(e) = commands::checkout(commit_id) {
                 eprintln!("Error checking out commit: {}", e);
+                process::exit(1);
+            }
+        }
+        ("loadlast", Some(_)) => {
+            if let Err(e) = commands::loadlast() {
+                eprintln!("Error loading last commit: {}", e);
                 process::exit(1);
             }
         }

@@ -99,7 +99,6 @@ pub fn add(paths: &[String]) -> std::io::Result<()> {
     Ok(())
 }
 
-// Rest of the file remains unchanged
 pub fn commit(message: &str) -> std::io::Result<()> {
     let working_dir = env::current_dir()?;
     let mut repo = Repository::load(working_dir)?;
@@ -197,5 +196,25 @@ pub fn checkout(commit_id: &str) -> std::io::Result<()> {
     }
     
     println!("Checked out commit: {}", &commit.id[..8]);
+    Ok(())
+}
+
+pub fn loadlast() -> std::io::Result<()> {
+    let working_dir = env::current_dir()?;
+    let repo = Repository::load(working_dir)?;
+    
+    if repo.commits.is_empty() {
+        return Err(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            "No commits found in repository",
+        ));
+    }
+    
+    // Get the last commit's ID
+    let last_commit = repo.commits.last().unwrap();
+    
+    // Use the existing checkout function to load the last commit
+    checkout(&last_commit.id)?;
+    
     Ok(())
 }

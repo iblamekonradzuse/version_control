@@ -15,9 +15,9 @@ struct OldRepository {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Commit {
+    pub timestamp: DateTime<Utc>,
     pub id: String,
     pub message: String,
-    pub timestamp: DateTime<Utc>,
     pub files: HashMap<String, String>,
 }
 
@@ -83,7 +83,7 @@ impl Repository {
         }
     }
 
-    // New helper function to rebuild objects store
+    // Helper function to rebuild objects store
     fn rebuild_objects_store(&mut self) -> std::io::Result<()> {
         self.objects.clear();
         

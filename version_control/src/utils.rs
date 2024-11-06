@@ -3,9 +3,6 @@ use uuid::Uuid;
 use std::fs;
 use std::path::Path;
 
-pub fn calculate_hash(content: &str) -> String {
-    calculate_hash_bytes(content.as_bytes())
-}
 
 pub fn calculate_hash_bytes(content: &[u8]) -> String {
     let mut hasher = Sha256::new();
