@@ -18,9 +18,10 @@ fn main() {
             SubCommand::with_name("add")
                 .about("Add files to staging area")
                 .arg(
-                    Arg::with_name("path")
-                        .help("Path to add")
+                    Arg::with_name("paths")
+                        .help("Paths to add")
                         .required(true)
+                        .multiple(true)
                         .index(1),
                 ),
         )
@@ -68,8 +69,13 @@ fn main() {
             }
         }
         ("add", Some(add_matches)) => {
-            let path = add_matches.value_of("path").unwrap();
-            if let Err(e) = commands::add(path) {
+            let paths: Vec<String> = add_matches
+                .values_of("paths")
+                .unwrap()
+                .map(String::from)
+                .collect();
+            
+            if let Err(e) = commands::add(&paths) {
                 eprintln!("Error adding files: {}", e);
                 process::exit(1);
             }
@@ -110,5 +116,5 @@ fn main() {
             println!("No command specified. Use --help for usage information.");
             process::exit(1);
         }
-          
-    }}
+    }
+}

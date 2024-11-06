@@ -13,29 +13,52 @@
       "message": "test1",
       "timestamp": "2024-11-06T11:15:17.693342Z",
       "files": {
-        "test2.md": "ab03c34f1ece08211fe2a8039fd6424199b3f5d7b55ff13b1134b364776c45c5",
         "test1.md": "7d6fd7774f0d87624da6dcf16d0d3d104c3191e771fbe2f39c86aed4b2bf1a0f",
-        "test.md": "634b027b1b69e1242d40d53e312b3b4ac7710f55be81f289b549446ef6778bee"
+        "test.md": "634b027b1b69e1242d40d53e312b3b4ac7710f55be81f289b549446ef6778bee",
+        "test2.md": "ab03c34f1ece08211fe2a8039fd6424199b3f5d7b55ff13b1134b364776c45c5"
+      }
+    },
+    {
+      "id": "0a342ec8-c469-41f7-8d3d-e5f12899ae07",
+      "message": "bigtest3",
+      "timestamp": "2024-11-06T11:52:13.603165Z",
+      "files": {
+        "test/i_lied_there_is_no_test.md": "a194ea91cb52b6ddb370233adc00495280efa02876cea88a98c54d5cb8a61bba",
+        "test/test1/test1": "11a77c3d96c06974b53d7f40a577e6813739eb5c811b2a86f59038ea90add772",
+        "test/test2/b.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test/test2/a.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test1.md": "7d6fd7774f0d87624da6dcf16d0d3d104c3191e771fbe2f39c86aed4b2bf1a0f",
+        "test.md": "634b027b1b69e1242d40d53e312b3b4ac7710f55be81f289b549446ef6778bee",
+        "test2.md": "ab03c34f1ece08211fe2a8039fd6424199b3f5d7b55ff13b1134b364776c45c5"
       }
     }
   ],
   "staging": {},
   "working_dir": "/Users/wervand/Desktop/des/dev/version_control/version_control",
   "objects": {
-    "ab03c34f1ece08211fe2a8039fd6424199b3f5d7b55ff13b1134b364776c45c5": [
+    "634b027b1b69e1242d40d53e312b3b4ac7710f55be81f289b549446ef6778bee": [
       116,
       101,
       115,
       116,
-      51,
+      49,
       10
     ],
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": [],
     "7d6fd7774f0d87624da6dcf16d0d3d104c3191e771fbe2f39c86aed4b2bf1a0f": [
       116,
       101,
       115,
       116,
       50,
+      10
+    ],
+    "ab03c34f1ece08211fe2a8039fd6424199b3f5d7b55ff13b1134b364776c45c5": [
+      116,
+      101,
+      115,
+      116,
+      51,
       10
     ],
     "a194ea91cb52b6ddb370233adc00495280efa02876cea88a98c54d5cb8a61bba": [
@@ -58,12 +81,11 @@
       115,
       10
     ],
-    "634b027b1b69e1242d40d53e312b3b4ac7710f55be81f289b549446ef6778bee": [
-      116,
-      101,
-      115,
-      116,
-      49,
+    "11a77c3d96c06974b53d7f40a577e6813739eb5c811b2a86f59038ea90add772": [
+      97,
+      97,
+      97,
+      97,
       10
     ]
   }
