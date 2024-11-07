@@ -1,0 +1,31 @@
+{
+  "commits": [
+    {
+      "timestamp": "2024-11-07T21:02:13.451656Z",
+      "id": "1647403e-49d0-4041-bd9c-0fcb338dcb14",
+      "message": "bigtest6",
+      "files": {
+        "test2.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test3.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test1.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "staging": {
+    "test3.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test2.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test1.md": "634b027b1b69e1242d40d53e312b3b4ac7710f55be81f289b549446ef6778bee"
+  },
+  "working_dir": "/Users/wervand/Desktop/des/dev/version_control/version_control/test",
+  "objects": {
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": [],
+    "634b027b1b69e1242d40d53e312b3b4ac7710f55be81f289b549446ef6778bee": [
+      116,
+      101,
+      115,
+      116,
+      49,
+      10
+    ]
+  }
+}

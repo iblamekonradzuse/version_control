@@ -38,6 +38,10 @@ fn main() {
                 ),
         )
         .subcommand(
+            SubCommand::with_name("status")
+                .about("Show working tree status"),
+        )
+        .subcommand(
             SubCommand::with_name("history")
                 .about("Show commit history"),
         )
@@ -77,6 +81,20 @@ fn main() {
                         .index(2),
                 ),
         )
+        .subcommand(
+            SubCommand::with_name("diffdetailed")
+                .about("Show detailed changes between commits or working directory")
+                .arg(
+                    Arg::with_name("commit_id1")
+                        .help("First commit ID (optional)")
+                        .index(1),
+                )
+                .arg(
+                    Arg::with_name("commit_id2")
+                        .help("Second commit ID (optional)")
+                        .index(2),
+                ),
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -102,6 +120,12 @@ fn main() {
             let message = commit_matches.value_of("message").unwrap();
             if let Err(e) = commands::commit(message) {
                 eprintln!("Error committing changes: {}", e);
+                process::exit(1);
+            }
+        }
+        ("status", Some(_)) => {
+            if let Err(e) = commands::status() {
+                eprintln!("Error showing status: {}", e);
                 process::exit(1);
             }
         }
@@ -141,6 +165,14 @@ fn main() {
             let commit_id2 = diff_matches.value_of("commit_id2");
             if let Err(e) = commands::diff(commit_id1, commit_id2) {
                 eprintln!("Error showing diff: {}", e);
+                process::exit(1);
+            }
+        }
+        ("diffdetailed", Some(diff_matches)) => {
+            let commit_id1 = diff_matches.value_of("commit_id1");
+            let commit_id2 = diff_matches.value_of("commit_id2");
+            if let Err(e) = commands::diffdetailed(commit_id1, commit_id2) {
+                eprintln!("Error showing detailed diff: {}", e);
                 process::exit(1);
             }
         }
